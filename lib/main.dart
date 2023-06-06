@@ -243,9 +243,7 @@ class AddQuestionScreen extends StatefulWidget {
 }
 
 class _AddQuestionScreenState extends State<AddQuestionScreen> {
-  List<String> items = Question.availableCategories.keys.toList();
-  String selectedValue = Question.availableCategories.keys.toList().first;
-
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -260,97 +258,214 @@ class _AddQuestionScreenState extends State<AddQuestionScreen> {
               ),
         ),
       ),
-      body: DropdownButtonHideUnderline(
-        child: DropdownButton2(
-          isExpanded: true,
-          hint: const Row(
-            children: [
-              Icon(
-                Icons.list,
-                size: 16,
-                color: limeGreen,
-              ),
-              SizedBox(
-                width: 4,
-              ),
-              Expanded(
-                child: Text(
-                  'Select Item',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: limeGreen,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-          items: items
-              .map((item) => DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(
-                      item,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: limeGreen,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ))
-              .toList(),
-          value: selectedValue,
-          onChanged: (value) {
-            setState(() {
-              selectedValue = value as String;
-            });
+      body: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            const Text('Enter a question:'),
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a value';
+                }
+                return null;
+              },
+            ),
+            const SingleChoiceWidget(),
+            const QuizDropdown(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+enum Hints { one, two, three }
+
+class SingleChoiceWidget extends StatefulWidget {
+  const SingleChoiceWidget({super.key});
+
+  @override
+  State<SingleChoiceWidget> createState() => _SingleChoiceWidgetState();
+}
+
+class _SingleChoiceWidgetState extends State<SingleChoiceWidget> {
+  Hints hint = Hints.one;
+
+  @override
+  Widget build(BuildContext context) {
+    return SegmentedButton(
+      style: ButtonStyle(
+        side: MaterialStateBorderSide.resolveWith((Set<MaterialState> states) {
+          return const BorderSide(
+            color: limeGreen,
+            width: 2,
+          );
+        }),
+        foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.pressed) ||
+                states.contains(MaterialState.selected)) {
+              return black;
+            }
+            return limeGreen;
           },
-          buttonStyleData: ButtonStyleData(
-            height: 50,
-            width: 160,
-            padding: const EdgeInsets.only(left: 14, right: 14),
+        ),
+        backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.pressed) ||
+                states.contains(MaterialState.selected)) {
+              return limeGreen;
+            }
+            return black;
+          },
+        ),
+      ),
+      segments: const [
+        ButtonSegment<Hints>(
+          value: Hints.one,
+          label: Text(
+            "One",
+          ),
+          icon: Icon(
+            Icons.one_x_mobiledata,
+            color: limeGreen,
+          ),
+        ),
+        ButtonSegment<Hints>(
+          value: Hints.two,
+          label: Text(
+            "Two",
+          ),
+          icon: Icon(
+            Icons.looks_two,
+            color: limeGreen,
+          ),
+        ),
+        ButtonSegment(
+          value: Hints.three,
+          label: Text(
+            "Three",
+          ),
+          icon: Icon(
+            Icons.three_g_mobiledata,
+            color: limeGreen,
+          ),
+        ),
+      ],
+      selected: <Hints>{hint},
+      onSelectionChanged: (Set<Hints> newSelection) {
+        setState(() {
+          hint = newSelection.first;
+        });
+      },
+    );
+  }
+}
+
+class QuizDropdown extends StatefulWidget {
+  const QuizDropdown({super.key});
+
+  @override
+  State<QuizDropdown> createState() => _QuizDropdownState();
+}
+
+class _QuizDropdownState extends State<QuizDropdown> {
+  List<String> items = Question.availableCategories.keys.toList();
+  String selectedValue = Question.availableCategories.keys.toList().first;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton2(
+        isExpanded: true,
+        hint: const Row(
+          children: [
+            Icon(
+              Icons.list,
+              size: 16,
+              color: limeGreen,
+            ),
+            SizedBox(
+              width: 4,
+            ),
+            Expanded(
+              child: Text(
+                'Select Item',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: limeGreen,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+        items: items
+            .map((item) => DropdownMenuItem<String>(
+                  value: item,
+                  child: Text(
+                    item,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: limeGreen,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ))
+            .toList(),
+        value: selectedValue,
+        onChanged: (value) {
+          setState(() {
+            selectedValue = value as String;
+          });
+        },
+        buttonStyleData: ButtonStyleData(
+          height: 50,
+          width: 160,
+          padding: const EdgeInsets.only(left: 14, right: 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: limeGreen,
+              width: 2,
+            ),
+            color: black,
+          ),
+          elevation: 2,
+        ),
+        iconStyleData: const IconStyleData(
+          icon: Icon(
+            Icons.arrow_forward_ios_outlined,
+          ),
+          iconSize: 14,
+          iconEnabledColor: limeGreen,
+          iconDisabledColor: Colors.grey,
+        ),
+        dropdownStyleData: DropdownStyleData(
+            maxHeight: 200,
+            width: 200,
+            padding: null,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(14),
+              color: black,
               border: Border.all(
                 color: limeGreen,
                 width: 2,
               ),
-              color: black,
             ),
-            elevation: 2,
-          ),
-          iconStyleData: const IconStyleData(
-            icon: Icon(
-              Icons.arrow_forward_ios_outlined,
-            ),
-            iconSize: 14,
-            iconEnabledColor: limeGreen,
-            iconDisabledColor: Colors.grey,
-          ),
-          dropdownStyleData: DropdownStyleData(
-              maxHeight: 200,
-              width: 200,
-              padding: null,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14),
-                color: black,
-                border: Border.all(
-                  color: limeGreen,
-                  width: 2,
-                ),
-              ),
-              elevation: 8,
-              offset: const Offset(-20, 0),
-              scrollbarTheme: ScrollbarThemeData(
-                radius: const Radius.circular(40),
-                thickness: MaterialStateProperty.all(6),
-                thumbVisibility: MaterialStateProperty.all(true),
-              )),
-          menuItemStyleData: const MenuItemStyleData(
-            height: 40,
-            padding: EdgeInsets.only(left: 14, right: 14),
-          ),
+            elevation: 8,
+            offset: const Offset(-20, 0),
+            scrollbarTheme: ScrollbarThemeData(
+              radius: const Radius.circular(40),
+              thickness: MaterialStateProperty.all(6),
+              thumbVisibility: MaterialStateProperty.all(true),
+            )),
+        menuItemStyleData: const MenuItemStyleData(
+          height: 40,
+          padding: EdgeInsets.only(left: 14, right: 14),
         ),
       ),
     );
