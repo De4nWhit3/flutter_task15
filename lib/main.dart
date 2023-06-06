@@ -268,7 +268,7 @@ class _AddQuestionScreenState extends State<AddQuestionScreen> {
               Icon(
                 Icons.list,
                 size: 16,
-                color: Colors.yellow,
+                color: limeGreen,
               ),
               SizedBox(
                 width: 4,
@@ -279,7 +279,7 @@ class _AddQuestionScreenState extends State<AddQuestionScreen> {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: Colors.yellow,
+                    color: limeGreen,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -294,7 +294,7 @@ class _AddQuestionScreenState extends State<AddQuestionScreen> {
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: limeGreen,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -313,9 +313,10 @@ class _AddQuestionScreenState extends State<AddQuestionScreen> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: Colors.black26,
+                color: limeGreen,
+                width: 2,
               ),
-              color: Colors.redAccent,
+              color: black,
             ),
             elevation: 2,
           ),
@@ -324,7 +325,7 @@ class _AddQuestionScreenState extends State<AddQuestionScreen> {
               Icons.arrow_forward_ios_outlined,
             ),
             iconSize: 14,
-            iconEnabledColor: Colors.yellow,
+            iconEnabledColor: limeGreen,
             iconDisabledColor: Colors.grey,
           ),
           dropdownStyleData: DropdownStyleData(
@@ -333,7 +334,11 @@ class _AddQuestionScreenState extends State<AddQuestionScreen> {
               padding: null,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(14),
-                color: Colors.redAccent,
+                color: black,
+                border: Border.all(
+                  color: limeGreen,
+                  width: 2,
+                ),
               ),
               elevation: 8,
               offset: const Offset(-20, 0),
