@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 const Color limeGreen = Color.fromARGB(255, 43, 255, 0);
-const Color fadedBlack = Color.fromARGB(255, 27, 27, 27);
+const Color fadedBlack = Color.fromARGB(255, 46, 46, 46);
 const Color black = Colors.black;
 void main() {
   runApp(const MyApp());
@@ -149,7 +149,7 @@ class _QuestionHomePageState extends State<QuestionHomePage> {
         backgroundColor: black,
         centerTitle: true,
         title: const Text(
-          'Dean\'s 10/10 App',
+          'Dean\'s 13/37 App',
           style: TextStyle(
             color: limeGreen,
             fontFeatures: <FontFeature>[
@@ -168,30 +168,37 @@ class _QuestionHomePageState extends State<QuestionHomePage> {
               child: SlideAnimation(
                 verticalOffset: 50.0,
                 child: FadeInAnimation(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: black,
-                      border: Border.all(
-                        color: limeGreen,
-                        width: 2,
-                      ),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(5),
-                      ),
-                    ),
-                    height: 100,
-                    width: double.infinity,
-                    margin: const EdgeInsets.all(
-                      10,
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          questions[index].question,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: limeGreen),
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: black,
+                        border: Border.all(
+                          color: limeGreen,
+                          width: 2,
                         ),
-                      ],
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                      ),
+                      // height: 100,
+                      width: double.infinity,
+                      margin: const EdgeInsets.all(
+                        10,
+                      ),
+                      child: Column(
+                        children: [
+                          Image(
+                            height: 150,
+                            image: AssetImage(questions[index].imageURL),
+                          ),
+                          Text(
+                            questions[index].question,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(color: limeGreen),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -200,19 +207,29 @@ class _QuestionHomePageState extends State<QuestionHomePage> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-          backgroundColor: black,
-          foregroundColor: limeGreen,
-          icon: const Icon(Icons.bug_report),
-          onPressed: () {
-            Navigator.of(context).pushNamed('/addQuestion');
-          },
-          label: const Text(
-            'Add Question',
-            style: TextStyle(
-                // color: limeGreen,
-                ),
-          )),
+      floatingActionButton: Container(
+        decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(
+              Radius.circular(20),
+            ),
+            border: Border.all(
+              color: limeGreen,
+              width: 2,
+            )),
+        child: FloatingActionButton.extended(
+            backgroundColor: black,
+            foregroundColor: limeGreen,
+            icon: const Icon(Icons.bug_report),
+            onPressed: () {
+              Navigator.of(context).pushNamed('/addQuestion');
+            },
+            label: const Text(
+              'Add Question',
+              style: TextStyle(
+                  // color: limeGreen,
+                  ),
+            )),
+      ),
     );
   }
 }
