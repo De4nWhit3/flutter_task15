@@ -1,4 +1,10 @@
 class Question {
+  static Map<String, String> availableCategories = {
+    "coding": 'coding',
+    "science": 'science',
+    "math": 'math'
+  };
+
   final String question;
   final String answer;
   final String category;
@@ -14,5 +20,9 @@ class Question {
 
   (String, String, String, String, List<String>) getAllData() {
     return (question, answer, category, imageURL, hints);
+  }
+
+  Map<String, String> getCategories() {
+    return availableCategories;
   }
 }
