@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
+import 'question.dart';
+
 const Color limeGreen = Color.fromARGB(255, 43, 255, 0);
 const Color fadedBlack = Color.fromARGB(255, 46, 46, 46);
 const Color black = Colors.black;
@@ -169,7 +171,9 @@ class _QuestionHomePageState extends State<QuestionHomePage> {
                 verticalOffset: 50.0,
                 child: FadeInAnimation(
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushNamed('/addQuestion');
+                    },
                     child: Container(
                       decoration: BoxDecoration(
                         color: black,
@@ -253,24 +257,5 @@ class AddQuestionScreen extends StatelessWidget {
       ),
       body: Placeholder(),
     );
-  }
-}
-
-class Question {
-  final String question;
-  final String answer;
-  final String category;
-  final String imageURL;
-  final List<String> hints;
-
-  Question(
-      {required this.question,
-      required this.answer,
-      required this.category,
-      required this.imageURL,
-      required this.hints});
-
-  (String, String, String, String, List<String>) getAllData() {
-    return (question, answer, category, imageURL, hints);
   }
 }
