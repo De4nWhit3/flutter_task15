@@ -2,11 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 
 import 'question.dart';
-import 'widgets/quiz_dropdown.dart';
-import 'widgets/single_choice_widget.dart';
+import 'widgets/add_question_screen.dart';
 
 const Color limeGreen = Color.fromARGB(255, 43, 255, 0);
 const Color fadedBlack = Color.fromARGB(255, 46, 46, 46);
@@ -29,7 +27,11 @@ class MyApp extends StatelessWidget {
       home: QuestionHomePage(),
       routes: <String, WidgetBuilder>{
         '/root': (BuildContext context) => QuestionHomePage(),
-        '/addQuestion': (BuildContext context) => const AddQuestionScreen(),
+        '/addQuestion': (BuildContext context) => const AddQuestionScreen(
+              black: black,
+              fadedBlack: fadedBlack,
+              limeGreen: limeGreen,
+            ),
         // '/viewSpecificQuestion':
       },
     );
@@ -228,61 +230,7 @@ class _QuestionHomePageState extends State<QuestionHomePage> {
             },
             label: const Text(
               'Add Question',
-              style: TextStyle(
-                  // color: limeGreen,
-                  ),
             )),
-      ),
-    );
-  }
-}
-
-class AddQuestionScreen extends StatefulWidget {
-  const AddQuestionScreen({super.key});
-
-  @override
-  State<AddQuestionScreen> createState() => _AddQuestionScreenState();
-}
-
-class _AddQuestionScreenState extends State<AddQuestionScreen> {
-  final _formKey = GlobalKey<FormState>();
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: fadedBlack,
-      appBar: AppBar(
-        backgroundColor: black,
-        foregroundColor: limeGreen,
-        title: const Text(
-          'Adding a question',
-          style: TextStyle(
-              // color: limeGreen,
-              ),
-        ),
-      ),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            const Text('Enter a question:'),
-            TextFormField(
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a value';
-                }
-                return null;
-              },
-            ),
-            const SingleChoiceWidget(
-              black: black,
-              limeGreen: limeGreen,
-            ),
-            const QuizDropdown(
-              black: black,
-              limeGreen: limeGreen,
-            ),
-          ],
-        ),
       ),
     );
   }
