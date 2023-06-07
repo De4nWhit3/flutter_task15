@@ -32,7 +32,6 @@ class MyApp extends StatelessWidget {
               fadedBlack: fadedBlack,
               limeGreen: limeGreen,
             ),
-        // '/viewSpecificQuestion':
       },
     );
   }
@@ -143,6 +142,8 @@ class QuestionHomePage extends StatefulWidget {
 }
 
 class _QuestionHomePageState extends State<QuestionHomePage> {
+  int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     List<Question> questions = widget.questions;
@@ -160,6 +161,27 @@ class _QuestionHomePageState extends State<QuestionHomePage> {
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: (int index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        backgroundColor: black,
+        selectedItemColor: limeGreen,
+        unselectedItemColor: const Color.fromARGB(255, 44, 143, 48),
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.star),
+            label: 'Some Option',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.speaker),
+            label: 'Other Option',
+          ),
+        ],
       ),
       body: Center(
         child: ListView.builder(
