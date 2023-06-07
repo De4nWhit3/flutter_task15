@@ -142,8 +142,8 @@ class QuestionHomePage extends StatefulWidget {
 }
 
 class _QuestionHomePageState extends State<QuestionHomePage> {
-  // int _selectedIndex = 0;
   int _selectedIndex = 0;
+  int _railSelectedIndex = 0;
   NavigationRailLabelType labelType = NavigationRailLabelType.all;
   bool showLeading = false;
   bool showTrailing = false;
@@ -151,6 +151,8 @@ class _QuestionHomePageState extends State<QuestionHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
     List<Question> questions = widget.questions;
     return Scaffold(
       backgroundColor: fadedBlack,
@@ -167,73 +169,109 @@ class _QuestionHomePageState extends State<QuestionHomePage> {
           ),
         ),
       ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   currentIndex: _selectedIndex,
-      //   onTap: (int index) {
-      //     setState(() {
-      //       _selectedIndex = index;
-      //     });
-      //   },
-      //   backgroundColor: black,
-      //   selectedItemColor: limeGreen,
-      //   unselectedItemColor: const Color.fromARGB(255, 44, 143, 48),
-      //   items: const [
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.star),
-      //       label: 'Some Option',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.speaker),
-      //       label: 'Other Option',
-      //     ),
-      //   ],
-      // ),
+      bottomNavigationBar: Visibility(
+        visible: width < 700,
+        child: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          onTap: (int index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+          backgroundColor: black,
+          selectedItemColor: limeGreen,
+          unselectedItemColor: const Color.fromARGB(255, 44, 143, 48),
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.star),
+              label: 'Some Option',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.speaker),
+              label: 'Other Option',
+            ),
+          ],
+        ),
+      ),
       body: Row(
         children: [
-          NavigationRail(
-            backgroundColor: Colors.green,
-            selectedIndex: _selectedIndex,
-            groupAlignment: groupAlignment,
-            onDestinationSelected: (int index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
-            labelType: labelType,
-            leading: showLeading
-                ? FloatingActionButton(
-                    elevation: 0,
-                    onPressed: () {
-                      // Add your onPressed code here!
-                    },
-                    child: const Icon(Icons.add),
-                  )
-                : const SizedBox(),
-            trailing: showTrailing
-                ? IconButton(
-                    onPressed: () {
-                      // Add your onPressed code here!
-                    },
-                    icon: const Icon(Icons.more_horiz_rounded),
-                  )
-                : const SizedBox(),
-            destinations: const <NavigationRailDestination>[
-              NavigationRailDestination(
-                icon: Icon(Icons.favorite_border),
-                selectedIcon: Icon(Icons.favorite),
-                label: Text('First'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.bookmark_border),
-                selectedIcon: Icon(Icons.book),
-                label: Text('Second'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.star_border),
-                selectedIcon: Icon(Icons.star),
-                label: Text('Third'),
-              ),
-            ],
+          Visibility(
+            visible: width >= 700,
+            child: Row(
+              children: [
+                NavigationRail(
+                  backgroundColor: black,
+                  useIndicator: true,
+                  indicatorColor: limeGreen,
+                  selectedIndex: _railSelectedIndex,
+                  groupAlignment: groupAlignment,
+                  onDestinationSelected: (int index) {
+                    setState(() {
+                      _railSelectedIndex = index;
+                      if (index == 0) {
+                        Navigator.of(context).pushNamed('/addQuestion');
+                      }
+                    });
+                  },
+                  labelType: labelType,
+                  destinations: const <NavigationRailDestination>[
+                    NavigationRailDestination(
+                      icon: Icon(
+                        Icons.favorite_border,
+                        color: limeGreen,
+                      ),
+                      selectedIcon: Icon(
+                        Icons.favorite,
+                        color: black,
+                      ),
+                      label: Text(
+                        'Add Question',
+                        style: TextStyle(
+                          color: limeGreen,
+                        ),
+                      ),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(
+                        Icons.bookmark_border,
+                        color: limeGreen,
+                      ),
+                      selectedIcon: Icon(
+                        Icons.book,
+                        color: black,
+                      ),
+                      label: Text(
+                        'Option 2',
+                        style: TextStyle(
+                          color: limeGreen,
+                        ),
+                      ),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(
+                        Icons.star_border,
+                        color: limeGreen,
+                      ),
+                      selectedIcon: Icon(
+                        Icons.star,
+                        color: black,
+                      ),
+                      label: Text(
+                        'Option 3',
+                        style: TextStyle(
+                          color: limeGreen,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const VerticalDivider(
+                  thickness: 2,
+                  width: 2,
+                  color: limeGreen,
+                ),
+              ],
+            ),
           ),
           Expanded(child: QuestionListWidget(questions: questions)),
         ],
