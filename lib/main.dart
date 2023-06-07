@@ -142,7 +142,12 @@ class QuestionHomePage extends StatefulWidget {
 }
 
 class _QuestionHomePageState extends State<QuestionHomePage> {
+  // int _selectedIndex = 0;
   int _selectedIndex = 0;
+  NavigationRailLabelType labelType = NavigationRailLabelType.all;
+  bool showLeading = false;
+  bool showTrailing = false;
+  double groupAlignment = -1.0;
 
   @override
   Widget build(BuildContext context) {
@@ -162,83 +167,76 @@ class _QuestionHomePageState extends State<QuestionHomePage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (int index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        backgroundColor: black,
-        selectedItemColor: limeGreen,
-        unselectedItemColor: const Color.fromARGB(255, 44, 143, 48),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: 'Some Option',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.speaker),
-            label: 'Other Option',
-          ),
-        ],
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: questions.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return AnimationConfiguration.staggeredList(
-                    position: index,
-                    duration: const Duration(milliseconds: 3),
-                    child: SlideAnimation(
-                      verticalOffset: 50.0,
-                      child: FadeInAnimation(
-                        child: GestureDetector(
-                          onTap: () {
-                            // Navigator.of(context).pushNamed('/addQuestion');
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: black,
-                              border: Border.all(
-                                color: limeGreen,
-                                width: 2,
-                              ),
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(5),
-                              ),
-                            ),
-                            // height: 100,
-                            width: double.infinity,
-                            margin: const EdgeInsets.all(
-                              10,
-                            ),
-                            child: Column(
-                              children: [
-                                Image(
-                                  height: 150,
-                                  image: AssetImage(questions[index].imageURL),
-                                ),
-                                Text(
-                                  questions[index].question,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(color: limeGreen),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
+      // bottomNavigationBar: BottomNavigationBar(
+      //   currentIndex: _selectedIndex,
+      //   onTap: (int index) {
+      //     setState(() {
+      //       _selectedIndex = index;
+      //     });
+      //   },
+      //   backgroundColor: black,
+      //   selectedItemColor: limeGreen,
+      //   unselectedItemColor: const Color.fromARGB(255, 44, 143, 48),
+      //   items: const [
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.star),
+      //       label: 'Some Option',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.speaker),
+      //       label: 'Other Option',
+      //     ),
+      //   ],
+      // ),
+      body: Row(
+        children: [
+          NavigationRail(
+            backgroundColor: Colors.green,
+            selectedIndex: _selectedIndex,
+            groupAlignment: groupAlignment,
+            onDestinationSelected: (int index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+            labelType: labelType,
+            leading: showLeading
+                ? FloatingActionButton(
+                    elevation: 0,
+                    onPressed: () {
+                      // Add your onPressed code here!
+                    },
+                    child: const Icon(Icons.add),
+                  )
+                : const SizedBox(),
+            trailing: showTrailing
+                ? IconButton(
+                    onPressed: () {
+                      // Add your onPressed code here!
+                    },
+                    icon: const Icon(Icons.more_horiz_rounded),
+                  )
+                : const SizedBox(),
+            destinations: const <NavigationRailDestination>[
+              NavigationRailDestination(
+                icon: Icon(Icons.favorite_border),
+                selectedIcon: Icon(Icons.favorite),
+                label: Text('First'),
               ),
-            ),
-          ],
-        ),
+              NavigationRailDestination(
+                icon: Icon(Icons.bookmark_border),
+                selectedIcon: Icon(Icons.book),
+                label: Text('Second'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.star_border),
+                selectedIcon: Icon(Icons.star),
+                label: Text('Third'),
+              ),
+            ],
+          ),
+          Expanded(child: QuestionListWidget(questions: questions)),
+        ],
       ),
       floatingActionButton: Container(
         decoration: BoxDecoration(
@@ -260,6 +258,68 @@ class _QuestionHomePageState extends State<QuestionHomePage> {
               'Add Question',
             )),
       ),
+    );
+  }
+}
+
+class QuestionListWidget extends StatelessWidget {
+  const QuestionListWidget({
+    super.key,
+    required this.questions,
+  });
+
+  final List<Question> questions;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: questions.length,
+      itemBuilder: (BuildContext context, int index) {
+        return AnimationConfiguration.staggeredList(
+          position: index,
+          duration: const Duration(milliseconds: 3),
+          child: SlideAnimation(
+            verticalOffset: 50.0,
+            child: FadeInAnimation(
+              child: GestureDetector(
+                onTap: () {
+                  // Navigator.of(context).pushNamed('/addQuestion');
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: black,
+                    border: Border.all(
+                      color: limeGreen,
+                      width: 2,
+                    ),
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(5),
+                    ),
+                  ),
+                  // height: 100,
+                  width: double.infinity,
+                  margin: const EdgeInsets.all(
+                    10,
+                  ),
+                  child: Column(
+                    children: [
+                      Image(
+                        height: 150,
+                        image: AssetImage(questions[index].imageURL),
+                      ),
+                      Text(
+                        questions[index].question,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(color: limeGreen),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
